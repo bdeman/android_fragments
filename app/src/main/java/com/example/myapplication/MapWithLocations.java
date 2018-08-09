@@ -1,13 +1,9 @@
 package com.example.myapplication;
 
 import android.content.Context;
-import android.content.Intent;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -16,11 +12,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.CopyrightOverlay;
 import org.osmdroid.views.overlay.ItemizedIconOverlay;
 import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
@@ -28,89 +24,13 @@ import org.osmdroid.views.overlay.OverlayItem;
 import java.util.ArrayList;
 
 public class MapWithLocations extends Fragment {
-
     MapView map = null;
 
     public ArrayList<MapItem> mapItems = new ArrayList<MapItem>();
 
-
     public static final String DETAILS_PROPERTY_NAME = "com.example.myapplication.MapWithLocations_DETAILS_PROPERTY_NAME";
     public static final String DETAILS_PROPERTY_DESC = "com.example.myapplication.MapWithLocations_DETAILS_PROPERTY_DESC";
     public static final String DETAILS_PROPERTY_PIC = "com.example.myapplication.MapWithLocations_DETAILS_PROPERTY_PIC";
-
-/*
-    public static MapWithLocations newInstance() {
-        return new MapWithLocations();
-    }*/
-/*
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-*/
-
-
-    /*@Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-        super.onCreateView(inflater, container, savedInstanceState);
-
-        View mapView = inflater.inflate(R.layout.map_with_locations, container, false);
-
-        map = (MapView) mapView.findViewById(R.id.map);
-
-
-        Context ctx = getContext();
-        Configuration.getInstance().setUserAgentValue(BuildConfig.APPLICATION_ID);
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
-
-        //map = new MapView(ctx);
-        map.setTileSource(TileSourceFactory.MAPNIK);
-
-        map.setBuiltInZoomControls(true);
-        map.setMultiTouchControls(true);
-
-        IMapController mapController = map.getController();
-        mapController.setZoom(10.0);
-        GeoPoint startPoint = new GeoPoint(52.3702, 4.8952);
-        mapController.setCenter(startPoint);
-
-        genLocationsForMap(mapItems);
-
-        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
-        for(MapItem item: mapItems) {
-            items.add(new OverlayItem(item.getmTitle(), item.getmDescription(),item.getmLocation() ));
-        }
-
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getActivity(),items,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        return false;
-                    }
-                    @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        System.out.println("TWICE");
-                        Intent intent = new Intent(getActivity(), DetailsPage.class);
-                        intent.putExtra(DETAILS_PROPERTY_NAME, item.getTitle());
-                        intent.putExtra(DETAILS_PROPERTY_DESC, item.getSnippet());
-                        intent.putExtra(DETAILS_PROPERTY_PIC, mapItems.get(index).getmPicture());
-                        System.out.println("HOI + "+ mapItems.get(index).getmPicture());
-                        //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(intent);
-                        return false;
-                    }
-                });
-        mOverlay.setFocusItemsOnTap(true);
-
-        map.getOverlays().add(mOverlay);
-
-
-        return mapView;
-
-
-    }*/
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -123,7 +43,6 @@ public class MapWithLocations extends Fragment {
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
 
         map.setTileSource(TileSourceFactory.MAPNIK);
-
         map.setBuiltInZoomControls(true);
         map.setMultiTouchControls(true);
 
@@ -139,6 +58,7 @@ public class MapWithLocations extends Fragment {
             items.add(new OverlayItem(item.getmTitle(), item.getmDescription(),item.getmLocation() ));
         }
 
+        //set the pinpoint markings on the map
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getActivity(),items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
@@ -153,7 +73,6 @@ public class MapWithLocations extends Fragment {
                         arguments.putString(DETAILS_PROPERTY_DESC, item.getSnippet());
                         arguments.putString(DETAILS_PROPERTY_PIC, mapItems.get(index).getmPicture());
                         detailsFrag.setArguments(arguments);
-
                         FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                         fragmentManager.beginTransaction().replace(R.id.fContent, detailsFrag).commit();
                         getActivity().setTitle(item.getTitle());
@@ -163,6 +82,8 @@ public class MapWithLocations extends Fragment {
 
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);
+        //set overlay to credit the opensource tiles/project :)
+        map.getOverlays().add(new CopyrightOverlay(ctx));
 
         return mapView;
     }

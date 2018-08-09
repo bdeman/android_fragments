@@ -12,11 +12,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-
     private DrawerLayout mDrawerLayout;
     private Toolbar toolbar;
     private NavigationView nvDrawer;
-
     private ActionBarDrawerToggle drawerToggle;
 
     @Override
@@ -28,9 +26,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         mDrawerLayout = findViewById(R.id.drawer_layout);
-
         drawerToggle = setupDrawerToggle();
-
         nvDrawer = findViewById(R.id.nav_view);
         setupDrawerContent(nvDrawer);
 
@@ -41,8 +37,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {

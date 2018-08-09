@@ -1,13 +1,11 @@
 package com.example.myapplication;
 
-
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.squareup.picasso.Picasso;
 
 public class DetailsPage extends android.support.v4.app.Fragment {
