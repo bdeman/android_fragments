@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         //set homepage as default on load.
         try {
             FragmentManager fragmentManager = getSupportFragmentManager();
-            fragmentManager.beginTransaction().replace(R.id.fContent, HomePage.class.newInstance()).commit();
+            fragmentManager.beginTransaction().replace(R.id.fContent, HomePage.class.newInstance()).addToBackStack(null).commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
         }
 
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.fContent, fragment).commit();
+        fragmentManager.beginTransaction().replace(R.id.fContent, fragment).addToBackStack(null).commit();
 
         item.setChecked(true);
         setTitle(item.getTitle());
@@ -106,4 +106,15 @@ public class MainActivity extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onBackPressed(){
+        FragmentManager fm = getSupportFragmentManager();
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+
 }

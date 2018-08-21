@@ -16,5 +16,10 @@
     <string name="drawer_open">Open navigation drawer</string>
     <string name="drawer_close">Close navigation drawer</string>
 
+    <string name="contact_us">Contact US</string>
+    <string name="home_page">Home</string>
+    <string name="map_with_locations">Map with locations</string>
+
+
     <string name="action_settings">Settings</string>
 </resources>

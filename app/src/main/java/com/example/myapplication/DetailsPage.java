@@ -12,11 +12,14 @@ public class DetailsPage extends android.support.v4.app.Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        container.clearDisappearingChildren();
         View detailsView = inflater.inflate(R.layout.details_page, container, false);
 
         String propertyName = getArguments().getString(MapWithLocations.DETAILS_PROPERTY_NAME);
         String description = getArguments().getString(MapWithLocations.DETAILS_PROPERTY_DESC);
         String imageURL = getArguments().getString(MapWithLocations.DETAILS_PROPERTY_PIC);
+
+        getActivity().setTitle(propertyName);
 
         TextView propertyNameTextView = detailsView.findViewById(R.id.textView2);
         propertyNameTextView.setText(propertyName);

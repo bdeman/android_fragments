@@ -26,7 +26,7 @@ import java.util.ArrayList;
 public class MapWithLocations extends Fragment {
     MapView map = null;
 
-    public ArrayList<MapItem> mapItems = new ArrayList<MapItem>();
+    public ArrayList<MapItem> mapItems = new ArrayList<>();
 
     public static final String DETAILS_PROPERTY_NAME = "com.example.myapplication.MapWithLocations_DETAILS_PROPERTY_NAME";
     public static final String DETAILS_PROPERTY_DESC = "com.example.myapplication.MapWithLocations_DETAILS_PROPERTY_DESC";
@@ -34,7 +34,10 @@ public class MapWithLocations extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        container.clearDisappearingChildren();
         LinearLayout mapView = (LinearLayout) inflater.inflate(R.layout.map_with_locations, container, false);
+        getActivity().setTitle(R.string.map_with_locations);
+
 
         map = (MapView) mapView.findViewById(R.id.map);
 
@@ -53,32 +56,35 @@ public class MapWithLocations extends Fragment {
 
         genLocationsForMap(mapItems);
 
-        ArrayList<OverlayItem> items = new ArrayList<OverlayItem>();
+        ArrayList<OverlayItem> items = new ArrayList<>();
         for(MapItem item: mapItems) {
             items.add(new OverlayItem(item.getmTitle(), item.getmDescription(),item.getmLocation() ));
         }
 
         //set the pinpoint markings on the map
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(getActivity(),items,
-                new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
-                    @Override
-                    public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
-                        return false;
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(getActivity(),items,
+            new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
+                @Override
+                public boolean onItemSingleTapUp(final int index, final OverlayItem item) {
+                    return false;
+                }
+                @Override
+                public boolean onItemLongPress(final int index, final OverlayItem item) {
+                    FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                    Fragment detailsFrag = fragmentManager.findFragmentByTag("details_page");
+                    if (detailsFrag == null) {
+                        detailsFrag = new DetailsPage();
                     }
-                    @Override
-                    public boolean onItemLongPress(final int index, final OverlayItem item) {
-                        DetailsPage detailsFrag = new DetailsPage();
-                        Bundle arguments = new Bundle();
-                        arguments.putString(DETAILS_PROPERTY_NAME, item.getTitle());
-                        arguments.putString(DETAILS_PROPERTY_DESC, item.getSnippet());
-                        arguments.putString(DETAILS_PROPERTY_PIC, mapItems.get(index).getmPicture());
-                        detailsFrag.setArguments(arguments);
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        fragmentManager.beginTransaction().replace(R.id.fContent, detailsFrag).commit();
-                        getActivity().setTitle(item.getTitle());
-                        return false;
-                    }
-                });
+                    Bundle arguments = new Bundle();
+                    arguments.putString(DETAILS_PROPERTY_NAME, item.getTitle());
+                    arguments.putString(DETAILS_PROPERTY_DESC, item.getSnippet());
+                    arguments.putString(DETAILS_PROPERTY_PIC, mapItems.get(index).getmPicture());
+                    detailsFrag.setArguments(arguments);
+                    fragmentManager.beginTransaction().replace(R.id.fContent, detailsFrag).addToBackStack("details_page").commit();
+                    return true;
+                }
+            }
+        );
 
         mOverlay.setFocusItemsOnTap(true);
         map.getOverlays().add(mOverlay);

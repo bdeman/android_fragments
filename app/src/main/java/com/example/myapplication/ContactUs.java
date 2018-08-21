@@ -10,6 +10,10 @@ public class ContactUs extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        container.clearDisappearingChildren();
+        getActivity().setTitle(R.string.contact_us);
+
         return inflater.inflate(R.layout.contact_us_page, container, false);
     }
+
 }

@@ -10,6 +10,8 @@ public class HomePage extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        container.clearDisappearingChildren();
+        getActivity().setTitle(R.string.home_page);
         return inflater.inflate(R.layout.home_page, container, false);
     }
 }
