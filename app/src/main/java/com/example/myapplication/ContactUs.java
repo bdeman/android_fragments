@@ -1,6 +1,7 @@
 package com.example.myapplication;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -27,6 +28,9 @@ public class ContactUs extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         linkedIn = getActivity().findViewById(R.id.linkedIn);
+        //create underline for link programmatically
+        linkedIn.setPaintFlags(linkedIn.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+        //listen for tap/click when on URL textview
         linkedIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
