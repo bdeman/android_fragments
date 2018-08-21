@@ -31,12 +31,29 @@ public class MainActivity extends AppCompatActivity {
         setupDrawerContent(nvDrawer);
 
         //set homepage as default on load.
+
+        final FragmentManager fragmentManager = getSupportFragmentManager();
         try {
-            FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction().replace(R.id.fContent, HomePage.class.newInstance()).addToBackStack(null).commit();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        //when navigating back with the back button, set the right menu item to selected
+        fragmentManager.addOnBackStackChangedListener(
+            new FragmentManager.OnBackStackChangedListener() {
+                public void onBackStackChanged() {
+                    Fragment current = fragmentManager.findFragmentById(R.id.fContent);
+                    if (current instanceof HomePage) {
+                        nvDrawer.setCheckedItem(R.id.nav_home);
+                    } else if(current instanceof MapWithLocations) {
+                        nvDrawer.setCheckedItem(R.id.nav_map);
+                    } else if(current instanceof ContactUs) {
+                        nvDrawer.setCheckedItem(R.id.nav_contact);
+                    }
+                }
+            }
+        );
     }
 
     private ActionBarDrawerToggle setupDrawerToggle() {
